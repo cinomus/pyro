@@ -35,6 +35,10 @@ export class UsersService {
     return await this.usersRepository.get(id);
   }
 
+  async getAll(): Promise<SerializedUser[]> {
+    return this.usersRepository.getAll();
+  }
+
   async create(inputs: CreateUserDto): Promise<SerializedUser> {
     if (!inputs.phoneNumber || !inputs.password || !inputs.name) {
       throw new HttpException('Wrong Parameters!', 500);
@@ -49,13 +53,7 @@ export class UsersService {
       });
     }
 
-    const res = await this.usersRepository.createEntity(inputs);
-    console.log(res);
-    return res;
-  }
-
-  async getAll(): Promise<SerializedUser[]> {
-    return this.usersRepository.getAll();
+    return await this.usersRepository.createEntity(inputs);
   }
 
   // async update(

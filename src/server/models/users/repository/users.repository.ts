@@ -68,17 +68,17 @@ import { EntityRepository } from 'typeorm';
 import { User } from '../entities/users.entity';
 import { ModelRepository } from '../../model.repository';
 import {
-  SerializedUser,
   allUserGroupsForSerializing,
+  SerializedUser,
 } from '../serializers/users.serializers';
 import { classToPlain, plainToClass } from 'class-transformer';
 import { NotFoundException } from '@nestjs/common';
+
 @EntityRepository(User)
 export class UsersRepository extends ModelRepository<User, SerializedUser> {
   async getAll() {
     const result = await this.find();
-    const result2 = this.transformMany(result);
-    return result2;
+    return this.transformMany(result);
   }
 
   async getByPhoneNumber(
