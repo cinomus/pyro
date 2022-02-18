@@ -76,11 +76,6 @@ import { NotFoundException } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UsersRepository extends ModelRepository<User, SerializedUser> {
-  async getAll() {
-    const result = await this.find();
-    return this.transformMany(result);
-  }
-
   async getByPhoneNumber(
     phoneNumber: string,
     relations: string[] = [],

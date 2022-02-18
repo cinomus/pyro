@@ -32,7 +32,7 @@ export class UsersService {
   ) {}
 
   async getById(id: string): Promise<SerializedUser | null> {
-    return await this.usersRepository.get(id);
+    return await this.usersRepository.getById(id);
   }
 
   async getAll(): Promise<SerializedUser[]> {
