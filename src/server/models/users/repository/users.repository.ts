@@ -64,7 +64,7 @@
 //     return models.map((model) => this.transform(model, transformOptions));
 //   }
 // }
-import { EntityRepository } from 'typeorm';
+import { DeepPartial, EntityRepository } from 'typeorm';
 import { User } from '../entities/users.entity';
 import { ModelRepository } from '../../model.repository';
 import {
@@ -73,9 +73,11 @@ import {
 } from '../serializers/users.serializers';
 import { classToPlain, plainToClass } from 'class-transformer';
 import { NotFoundException } from '@nestjs/common';
+import { CreateUserDto } from '../dto/createUser.dto';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @EntityRepository(User)
-export class UsersRepository extends ModelRepository<User, SerializedUser> {
+export class UsersRepository extends ModelRepository<User> {
   async getByPhoneNumber(
     phoneNumber: string,
     relations: string[] = [],
@@ -93,6 +95,39 @@ export class UsersRepository extends ModelRepository<User, SerializedUser> {
         return Promise.resolve(entity ? this.transform(entity) : null);
       })
       .catch((error) => Promise.reject(error));
+  }
+
+  async getById(
+    id: string,
+    relations: string[] = [],
+    throwsException = false,
+  ): Promise<SerializedUser | null> {
+    try {
+      console.log('users get by id');
+      const entity = await this.findOne({
+        where: { id },
+        relations,
+      });
+      if (!entity && throwsException) {
+        return Promise.reject(new NotFoundException('Model not found.'));
+      }
+
+      return Promise.resolve(entity ? this.transform(entity) : null);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async getAll(throwsException = false) {
+    try {
+      const entities = await this.find();
+      if (!entities && throwsException) {
+        return Promise.reject(new NotFoundException('Models not found.'));
+      }
+      return Promise.resolve(entities ? this.transformMany(entities) : null);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   transform(model: User): SerializedUser {

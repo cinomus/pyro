@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PostgresDatabaseProviderModule } from './providers/database/postgres/provider.module';
 import { UsersModule } from './models/users/users.module';
+import { ProductsModule } from './models/products/products.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UsersModule } from './models/users/users.module';
     // }),
     PostgresDatabaseProviderModule,
     UsersModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
