@@ -5,6 +5,8 @@
 .next
 .idea
 
+.env
+
 
 # Logs
 logs
